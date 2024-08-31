@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import Snake from './components/Snake';
 import Bait from './components/Bait';
@@ -25,6 +25,7 @@ function App() {
   const [level, setLevel] = useState(1);
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     const onKeyDown = (e) => {
@@ -48,10 +49,6 @@ function App() {
     window.addEventListener('keydown', onKeyDown);
     return () => window.removeEventListener('keydown', onKeyDown);
   }, [direction]);
-
-  const onGameOver = () => {
-    setGameOver(true);
-};
 
   const checkIfCollapsed = useCallback((snake) => {
     let snakeBody = [...snake];
@@ -119,8 +116,48 @@ function App() {
   }, [snakeDots, direction, bait, speed, gameOver, checkIfCollapsed, checkIfOutOfBorders, score]);
 
   const startNewGame = () => {
-    //
-  }
+    setSnakeDots([
+        [0, 6],
+        [2, 6],
+    ]);
+    setBait(getRandomCoordinates());
+    setDirection('RIGHT');
+    setSpeed(200);
+    setLevel(1);
+    setScore(0);
+    setGameOver(false);
+  };
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+      if (/android/i.test(userAgent)) {
+        return true;
+      }
+      if (/iPad|iPhone/.test(userAgent) && !window.MSStream) {
+        return true;
+      }
+      return false;
+    };
+    setIsMobile(checkIfMobile());
+  }, []);
+
+  const onGameOver = () => {
+    setGameOver(true);
+    if (score > bestScore) {
+      setBestScore(score);
+      localStorage.setItem('bestScore', score);
+    }
+  };
+
+  useEffect(() => {
+    if (gameOver) {
+        if (score > bestScore) {
+            setBestScore(score);
+            localStorage.setItem('bestScore', score);
+        }
+    }
+}, [gameOver, score, bestScore]);
 
   return (
     <div className="game-container">
@@ -150,6 +187,16 @@ function App() {
           {gameOver && <div className="game-over">Game Over</div>}
         </div>
       </div>
+      {isMobile ? (
+        <div className="controls">
+          <button onClick={() => setDirection('UP')}>↑</button>
+          <div>
+            <button onClick={() => setDirection('LEFT')}>←</button>
+            <button onClick={() => setDirection('DOWN')}>↓</button>
+            <button onClick={() => setDirection('RIGHT')}>→</button>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }
