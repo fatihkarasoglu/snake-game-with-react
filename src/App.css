@@ -113,7 +113,82 @@ html, body {
   transition: all 0.2s ease;
 }
 
-@media (max-width: 450px) {
+@media (max-width: 480px) {
+  .score-info {
+    flex-direction: column;
+    padding: 5px;
+  }
+
+  .score-info span {
+    font-size: medium;
+  }
+
+  .main-si {
+    font-size: smaller;
+  }
+
+  .main-si button {
+    font-size: smaller;
+    color: #54B435;
+  }
+
+  .game-area {
+    height: calc(100vh - 184px);
+    
+  }
+  .game-board {
+    width: 100%;
+    height: calc(100vh - 184px);
+  }
+
+  .snake-dot {
+    width: 9px;
+    height: 9px;
+  }
+  
+  .bait {
+    width: 9px;
+    height: 9px;
+  }
+
+  .game-over {
+    width: 100%;
+    overflow: hidden;
+    font-size: 18px;
+  }
+
+  .controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #222;
+    padding: 10px;
+    box-sizing: border-box;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    z-index: 3;
+  }
+
+  .controls button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  .controls button:active {
+    background-color: #555;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 767px) {
   .game-area {
     height: calc(100vh - 191px);
     top: 35px;
